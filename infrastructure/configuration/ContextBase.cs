@@ -1,12 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+using models.Entities.Fit_user;
 
-namespace infrastructure.configuration
+namespace infrastructure.Configuration
 {
     public class ContextBase : DbContext
     {
         public ContextBase(DbContextOptions<ContextBase> options) : base(options)
         {
         }
+
+        public DbSet<FitUser> FitUser => Set<FitUser>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
