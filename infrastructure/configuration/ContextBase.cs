@@ -15,7 +15,7 @@ namespace infrastructure.Configuration
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql(Microsoft.EntityFrameworkCore.ServerVersion.AutoDetect(GetStringConnectionConfig()));
+                optionsBuilder.UseMySql(GetStringConnectionConfig(),Microsoft.EntityFrameworkCore.ServerVersion.AutoDetect(GetStringConnectionConfig()));
                 base.OnConfiguring(optionsBuilder);
             }
         }

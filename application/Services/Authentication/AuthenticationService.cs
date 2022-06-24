@@ -41,7 +41,17 @@ namespace application.Services.Authentication
                 //Salvar o refreshToken no banco
                 //Salvar o token no dynamoDB
             }
-            throw new NotImplementedException();
+            return new Token();
+        }
+
+        public async Task CriaLogin(LoginInput input){
+
+            var encryptedPassword = Encrypt(input.Password);
+
+            var loginDto = new LoginDto(input.Username, encryptedPassword);
+
+            await _userRepository.CriaLogin(loginDto);
+
         }
 
         private Token GenerateToken(LoginInput input)
@@ -68,7 +78,6 @@ namespace application.Services.Authentication
 
             return new Token(tokenHandler.WriteToken(token), GenerateRefreshToken());
         }
-
 
         private static string GenerateRefreshToken()
         {

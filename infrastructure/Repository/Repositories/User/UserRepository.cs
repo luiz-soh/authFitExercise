@@ -6,6 +6,7 @@ using infrastructure.Configuration;
 using infrastructure.Repository.Interfaces.User;
 using Microsoft.EntityFrameworkCore;
 using models.Dto.Login;
+using models.Entities.Fit_user;
 
 namespace infrastructure.Repository.Repositories.User
 {
@@ -25,6 +26,17 @@ namespace infrastructure.Repository.Repositories.User
             {
                 return await contexto.FitUser.Where(x => x.username == input.Username &&
                 x.password == input.Password).AnyAsync();
+            }
+        }
+
+        public async Task CriaLogin(LoginDto input)
+        {
+
+            var user = new FitUser(input);
+            using (var contexto = new ContextBase(_optionsBuilder))
+            {
+                await contexto.FitUser.AddAsync(user);
+                await contexto.SaveChangesAsync();
             }
         }
     }
