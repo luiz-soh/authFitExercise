@@ -5,7 +5,7 @@ namespace application.Interfaces.Authentication
 {
     public interface IAuthentication
     {
-        Task<Token> RealizaLogin(LoginInput input);
+        Task<TokenDTO> RealizaLogin(LoginInput input);
         Task CriaLogin(LoginInput input);
     }
 }

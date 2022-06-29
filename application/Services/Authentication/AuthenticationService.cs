@@ -8,6 +8,9 @@ using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using infrastructure.Repository.Interfaces.Token;
+using Microsoft.Extensions.Options;
+using models.Configuration.TokenConfiguration;
 
 namespace application.Services.Authentication
 {
@@ -15,36 +18,43 @@ namespace application.Services.Authentication
     {
 
         private readonly IUserRepository _userRepository;
+        private readonly ITokenRepository _tokenRepository;
+        private readonly TokenConfiguration _settings;
 
-        private readonly IConfiguration _configuration;
 
-
-        public AuthenticationService(IUserRepository userRepository, IConfiguration configuration)
+        public AuthenticationService(IUserRepository userRepository,
+        ITokenRepository tokenRepository, IOptions<TokenConfiguration> Settings)
         {
             _userRepository = userRepository;
-            _configuration = configuration;
-
+            _tokenRepository = tokenRepository;
+            _settings = Settings.Value;
         }
 
-        public async Task<Token> RealizaLogin(LoginInput input)
+        public async Task<TokenDTO> RealizaLogin(LoginInput input)
         {
             var loginDto = new LoginDto(input.Username, input.Password);
 
             var encryptedPassword = Encrypt(input.Password);
+            loginDto.Password = encryptedPassword;
 
-            var exists = await _userRepository.RealizaLogin(loginDto);
+            var userId = await _userRepository.RealizaLogin(loginDto);
 
-            if(exists)
+            if (userId != 0)
             {
-                var token = GenerateToken(input);
-                //TODO
-                //Salvar o refreshToken no banco
-                //Salvar o token no dynamoDB
+                var token = GenerateToken(input, userId);
+
+                var cachedToken = new CachedTokenDTO(userId, token.User_Token);
+                var saveToken = await _tokenRepository.AdicionaToken(cachedToken);
+                if (!saveToken)
+                    return new TokenDTO();
+
+                await _userRepository.AtualizaRefreshToken(token);
             }
-            return new Token();
+            return new TokenDTO();
         }
 
-        public async Task CriaLogin(LoginInput input){
+        public async Task CriaLogin(LoginInput input)
+        {
 
             var encryptedPassword = Encrypt(input.Password);
 
@@ -54,11 +64,11 @@ namespace application.Services.Authentication
 
         }
 
-        private Token GenerateToken(LoginInput input)
+        private TokenDTO GenerateToken(LoginInput input, int userId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            string secret = _configuration["ClientSecret"];
+            string secret = _settings.ClientSecret;
             var key = Encoding.ASCII.GetBytes(secret);
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -76,7 +86,7 @@ namespace application.Services.Authentication
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return new Token(tokenHandler.WriteToken(token), GenerateRefreshToken());
+            return new TokenDTO(tokenHandler.WriteToken(token), GenerateRefreshToken(), userId);
         }
 
         private static string GenerateRefreshToken()
@@ -93,7 +103,7 @@ namespace application.Services.Authentication
 
             using (var sha512 = SHA512.Create())
             {
-                var bytes = Encoding.UTF8.GetBytes($"{_configuration["PreSalt"]}{dataToEncrypt}{_configuration["PosSalt"]}");
+                var bytes = Encoding.UTF8.GetBytes($"{_settings.PreSalt}{dataToEncrypt}{_settings.PosSalt}");
                 var hash = sha512.ComputeHash(bytes);
                 encryptedData = GetStringFromHash(hash);
             }

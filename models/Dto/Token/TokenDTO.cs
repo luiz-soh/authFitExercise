@@ -1,26 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace models.Dto.Token
 {
-    public class Token
+    public class TokenDTO
     {
         #region  construtores
-        public Token(string user_Token, string refresh_Token)
+        public TokenDTO(string user_Token, string refresh_Token, int userId)
         {
             this.User_Token = user_Token;
             this.Refresh_Token = refresh_Token;
+            this.User_Id = userId;
         }
 
-        public Token()
+        public TokenDTO()
         {
             this.User_Token = string.Empty;
             this.Refresh_Token = string.Empty;
         }
         #endregion
 
+        public int User_Id { get; set; }
         public string User_Token { get; set; }
         public string Refresh_Token { get; set; }
     }
