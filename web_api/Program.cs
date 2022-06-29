@@ -1,30 +1,39 @@
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
 using application.Interfaces.Authentication;
 using application.Services.Authentication;
-using infrastructure.Configuration;
+using infrastructure.Repository.Interfaces.Token;
 using infrastructure.Repository.Interfaces.User;
+using infrastructure.Repository.Repositories.Token;
 using infrastructure.Repository.Repositories.User;
-using Microsoft.EntityFrameworkCore;
+using models.Configuration.TokenConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<TokenConfiguration>(
+    builder.Configuration.GetSection(TokenConfiguration.Configuration));
+
 // Add services to the container.
 
-// var _connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-// builder.Services.AddEntityFrameworkMySql().AddDbContext<ContextBase>(
-//     options => options.UseMySql(
-//         _connectionString,
-//         ServerVersion.AutoDetect(_connectionString)
-//     ));
+//User
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //Authentication
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IAuthentication, AuthenticationService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Add DynamoDB configuration
+var awsOptions = builder.Configuration.GetAWSOptions();
+builder.Services.AddDefaultAWSOptions(awsOptions);
+builder.Services.AddAWSService<IAmazonDynamoDB>();
+builder.Services.AddScoped<IDynamoDBContext, DynamoDBContext>();
+
+builder.Services.AddOptions();
 
 var app = builder.Build();
 
