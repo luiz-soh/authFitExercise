@@ -1,19 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DataModel;
 
-namespace models.Entities.Logged_user
+namespace models.Entities.LoggedUser
 {
     [DynamoDBTable("fitexercisetokens")]
     public class LoggedUser
     {
         public LoggedUser(int userId, string token)
         {
-            this.UserId = userId;
-            this.Token = token;
-            this.ttl = DateTimeOffset.Now.AddDays(1).ToUnixTimeSeconds();
+            UserId = userId;
+            Token = token;
+            Ttl = DateTimeOffset.Now.AddDays(1).ToUnixTimeSeconds();
+        }
+
+        public LoggedUser(){
+            UserId = 0;
+            Token = string.Empty;
+            Ttl = DateTimeOffset.Now.AddDays(1).ToUnixTimeSeconds();
         }
 
         [DynamoDBHashKey("user_id")]
@@ -23,6 +25,6 @@ namespace models.Entities.Logged_user
         public string Token { get; set; }
 
         [DynamoDBProperty("ttl")]
-        public long ttl { get; set; }
+        public long Ttl { get; set; }
     }
 }

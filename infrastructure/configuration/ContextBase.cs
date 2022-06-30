@@ -1,12 +1,17 @@
 using Microsoft.EntityFrameworkCore;
-using models.Entities.Fit_user;
+using Microsoft.Extensions.Options;
+using models.Entities.FitUser;
+using Models.Configuration.ConnectionString;
 
 namespace infrastructure.Configuration
 {
     public class ContextBase : DbContext
     {
-        public ContextBase(DbContextOptions<ContextBase> options) : base(options)
+        private readonly ConnectionStrings _connectionString;
+
+        public ContextBase(DbContextOptions<ContextBase> options, IOptions<ConnectionStrings> connectionString) : base(options)
         {
+            _connectionString = connectionString.Value;
         }
 
         public DbSet<FitUser> FitUser => Set<FitUser>();
@@ -15,7 +20,7 @@ namespace infrastructure.Configuration
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql(GetStringConnectionConfig(),Microsoft.EntityFrameworkCore.ServerVersion.AutoDetect(GetStringConnectionConfig()));
+                optionsBuilder.UseMySql(GetStringConnectionConfig(), ServerVersion.AutoDetect(GetStringConnectionConfig()));
                 base.OnConfiguring(optionsBuilder);
             }
         }
@@ -25,7 +30,7 @@ namespace infrastructure.Configuration
         }
         private string GetStringConnectionConfig()
         {
-            string strCon = "Server=db-fitexercise.cluster-clvhebcrqq9m.us-east-1.rds.amazonaws.com;Database=fitexercise;Uid=admin;Pwd=SKVbEGLzInMw;";
+            string strCon = _connectionString.FitExerciseDB;
             return strCon;
         }
     }

@@ -4,7 +4,6 @@ using models.Dto.Token;
 using infrastructure.Repository.Interfaces.User;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
@@ -30,41 +29,68 @@ namespace application.Services.Authentication
             _settings = Settings.Value;
         }
 
-        public async Task<TokenDTO> RealizaLogin(LoginInput input)
+        public async Task<TokenDTO> SignIn(LoginInput input)
         {
             var loginDto = new LoginDto(input.Username, input.Password);
 
             var encryptedPassword = Encrypt(input.Password);
             loginDto.Password = encryptedPassword;
 
-            var userId = await _userRepository.RealizaLogin(loginDto);
+            var userId = await _userRepository.SignIn(loginDto);
 
             if (userId != 0)
             {
-                var token = GenerateToken(input, userId);
+                var token = GenerateToken(input.Username, userId);
 
-                var cachedToken = new CachedTokenDTO(userId, token.User_Token);
-                var saveToken = await _tokenRepository.AdicionaToken(cachedToken);
+                var cachedToken = new CachedTokenDTO(userId, token.UserToken);
+                var saveToken = await _tokenRepository.AddToken(cachedToken);
                 if (!saveToken)
                     return new TokenDTO();
 
-                await _userRepository.AtualizaRefreshToken(token);
+                await _userRepository.UpdateRefreshToken(token);
+
+                return token;
             }
             return new TokenDTO();
         }
 
-        public async Task CriaLogin(LoginInput input)
+        public async Task SignUp(LoginInput input)
         {
 
             var encryptedPassword = Encrypt(input.Password);
 
             var loginDto = new LoginDto(input.Username, encryptedPassword);
 
-            await _userRepository.CriaLogin(loginDto);
+            await _userRepository.SignUp(loginDto);
 
         }
 
-        private TokenDTO GenerateToken(LoginInput input, int userId)
+        public async Task<TokenDTO> UpdateToken(string refreshToken)
+        {
+
+            var user = await _userRepository.GetByRefreshToken(refreshToken);
+
+            if (user.Id != 0)
+            {
+                var token = GenerateToken(user.Name, user.Id);
+
+                var cachedToken = new CachedTokenDTO(user.Id, token.UserToken);
+                var saveToken = await _tokenRepository.AddToken(cachedToken);
+                if (!saveToken)
+                    return new TokenDTO();
+
+                await _userRepository.UpdateRefreshToken(token);
+
+                return token;
+            }
+
+            return new TokenDTO();
+
+        }
+
+        #region private methods
+
+        private TokenDTO GenerateToken(string username, int userId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -75,10 +101,10 @@ namespace application.Services.Authentication
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, input.Username),
+                    new Claim(ClaimTypes.Name, username),
                     new Claim(ClaimTypes.Role, "Adm")
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(15),
+                Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature)
@@ -122,5 +148,7 @@ namespace application.Services.Authentication
 
             return result.ToString();
         }
+
+        #endregion
     }
 }

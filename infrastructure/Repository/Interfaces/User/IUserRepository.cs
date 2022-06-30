@@ -1,12 +1,14 @@
 using models.Dto.Login;
 using models.Dto.Token;
+using models.Dto.User;
 
 namespace infrastructure.Repository.Interfaces.User
 {
     public interface IUserRepository
     {
-        Task<int> RealizaLogin(LoginDto input);
-        Task CriaLogin(LoginDto input);
-        Task AtualizaRefreshToken(TokenDTO input);
+        Task<int> SignIn(LoginDto input);
+        Task SignUp(LoginDto input);
+        Task UpdateRefreshToken(TokenDTO input);
+        Task<UserDto> GetByRefreshToken(string refreshToken);
     }
 }

@@ -4,8 +4,8 @@ namespace models.Dto.Token
     {
         public CachedTokenDTO(int userId, string token)
         {
-            this.UserId = userId;
-            this.Token = token;
+            UserId = userId;
+            Token = token;
         }
 
         public int UserId { get; set; }

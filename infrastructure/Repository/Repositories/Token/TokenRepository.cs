@@ -3,7 +3,7 @@ using infrastructure.Configuration;
 using infrastructure.Repository.Interfaces.Token;
 using Microsoft.EntityFrameworkCore;
 using models.Dto.Token;
-using models.Entities.Logged_user;
+using models.Entities.LoggedUser;
 
 namespace infrastructure.Repository.Repositories.Token
 {
@@ -17,7 +17,7 @@ namespace infrastructure.Repository.Repositories.Token
             _dynamoDBContext = dynamoDBContext;
         }
 
-        public async Task<bool> AdicionaToken(CachedTokenDTO input)
+        public async Task<bool> AddToken(CachedTokenDTO input)
         {
             try
             {

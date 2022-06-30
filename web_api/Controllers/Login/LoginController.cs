@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using application.Interfaces.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using models.Dto.Login;
@@ -21,29 +17,43 @@ namespace web_api.Controllers.Login
             _authentication = authentication;
         }
 
-        [HttpPost("RealizaLogin")]
-        public async Task<IActionResult> RealizaLogin(LoginInput input)
+        [HttpPost("SignIn")]
+        public async Task<IActionResult> SignIn(LoginInput input)
         {
             if (string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
                 return BadRequest(new { message = "usuario e senha obrigatórios" });
 
-            var token = await _authentication.RealizaLogin(input);
+            var token = await _authentication.SignIn(input);
 
-            if (string.IsNullOrEmpty(token.User_Token))
+            if (string.IsNullOrEmpty(token.UserToken))
                 return NotFound(new { message = "usuario ou senha invalidos" });
 
             return Ok(token);
         }
 
-        [HttpPost("CriaLogin")]
-        public async Task<IActionResult> CriaLogin(LoginInput input)
+        [HttpPost("SignUp")]
+        public async Task<IActionResult> SignUp(LoginInput input)
         {
             if (string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
                 return BadRequest(new { message = "usuario e senha obrigatórios" });
 
-            await _authentication.CriaLogin(input);
+            await _authentication.SignUp(input);
 
             return Ok();
+        }
+
+        [HttpPut("UpdateToken")]
+        public async Task<IActionResult> UpdateToken(string refreshToken)
+        {
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest(new { message = "usuario e senha obrigatórios" });
+
+            var token = await _authentication.UpdateToken(refreshToken);
+
+            if (string.IsNullOrEmpty(token.UserToken))
+                return NotFound(new { message = "usuario ou senha invalidos" });
+
+            return Ok(token);
         }
 
     }

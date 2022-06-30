@@ -8,6 +8,6 @@ namespace infrastructure.Repository.Interfaces.Token
 {
     public interface ITokenRepository
     {
-        Task<bool> AdicionaToken(CachedTokenDTO input);
+        Task<bool> AddToken(CachedTokenDTO input);
     }
 }

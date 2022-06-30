@@ -7,12 +7,14 @@ using infrastructure.Repository.Interfaces.User;
 using infrastructure.Repository.Repositories.Token;
 using infrastructure.Repository.Repositories.User;
 using models.Configuration.TokenConfiguration;
+using Models.Configuration.ConnectionString;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<TokenConfiguration>(
     builder.Configuration.GetSection(TokenConfiguration.Configuration));
 
+builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection(ConnectionStrings.ConnectionString));
 // Add services to the container.
 
 //User
