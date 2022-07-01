@@ -15,5 +15,8 @@ namespace models.Entities.FitWorkouts
 
         [Column("workout_name")]
         public string WorkoutName { get; set; } = string.Empty;
+
+        [Column("is_detailed")]
+        public bool IsDetailed { get; set; }
     }
 }
