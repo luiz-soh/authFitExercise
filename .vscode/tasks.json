@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/fitexercise_api.csproj",
+                "${workspaceFolder}/web_api/Fitexerciselogin_api.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/fitexercise_api.csproj",
+                "${workspaceFolder}/web_api/Fitexerciselogin_api.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/fitexercise_api.csproj"
+                "${workspaceFolder}/web_api/Fitexerciselogin_api.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
