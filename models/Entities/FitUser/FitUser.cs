@@ -4,7 +4,7 @@ using models.Dto.Login;
 
 namespace models.Entities.FitUser
 {
-    [Table("fit_users")]
+    [Table("FitUser")]
     public class FitUser
     {
 
@@ -22,20 +22,24 @@ namespace models.Entities.FitUser
             Username = input.Username;
             Password = input.Password;
             RefreshToken = string.Empty;
+            Profile = string.Empty; //Passar para enum e criar no DTO
         }
         #endregion
 
-        [Column("user_id")]
+        [Column("UserId")]
         [Key]
         public int UserId { get; set; }
 
-        [Column("username")]
-        public string Username { get; set; } = string.Empty;
+        [Column("UserName")]
+        public string Username { get; set; }
 
-        [Column("password")]
-        public string Password { get; set; } = string.Empty;
+        [Column("UserPassword")]
+        public string Password { get; set; }
 
-        [Column("refresh_token")]
-        public string RefreshToken { get; set; } = string.Empty;
+        [Column("RefreshToken")]
+        public string RefreshToken { get; set; }
+
+        [Column("UserProfile")]
+        public string Profile { get; set; }
     }
 }
