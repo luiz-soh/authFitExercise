@@ -15,6 +15,8 @@ namespace web_api.Controllers.Login
             _authentication = authentication;
         }
 
+        //TODO
+        //Cria inputs separados para SignIn e SignUp
         [HttpPost("SignIn")]
         public async Task<IActionResult> SignIn(LoginInput input)
         {
