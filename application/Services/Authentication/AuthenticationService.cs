@@ -59,7 +59,7 @@ namespace application.Services.Authentication
 
             var encryptedPassword = Encrypt(input.Password);
 
-            var loginDto = new LoginDto(input.Username, encryptedPassword);
+            var loginDto = new LoginDto(input.Username, encryptedPassword, input.UserProfile);
 
             await _userRepository.SignUp(loginDto);
 

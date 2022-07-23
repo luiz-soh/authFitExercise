@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using models.Dto.Login;
+using Models.Enums;
 
 namespace models.Entities.FitUser
 {
-    [Table("FitUser")]
+    [Table("fituser")]
     public class FitUser
     {
 
@@ -22,7 +23,7 @@ namespace models.Entities.FitUser
             Username = input.Username;
             Password = input.Password;
             RefreshToken = string.Empty;
-            Profile = string.Empty; //Passar para enum e criar no DTO
+            Profile = input.UserProfile; //Passar para enum e criar no DTO
         }
         #endregion
 
@@ -40,6 +41,6 @@ namespace models.Entities.FitUser
         public string RefreshToken { get; set; }
 
         [Column("UserProfile")]
-        public string Profile { get; set; }
+        public UserProfileEnum Profile { get; set; }
     }
 }

@@ -8,12 +8,10 @@ namespace web_api.Controllers.Login
     [Route("[controller]")]
     public class LoginController : Controller
     {
-        private readonly ILogger<LoginController> _logger;
         private readonly IAuthentication _authentication;
 
-        public LoginController(ILogger<LoginController> logger, IAuthentication authentication)
+        public LoginController(IAuthentication authentication)
         {
-            _logger = logger;
             _authentication = authentication;
         }
 
