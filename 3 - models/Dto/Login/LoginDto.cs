@@ -5,9 +5,13 @@ namespace models.Dto.Login
     public class LoginDto
     {
 
+//TODO implementar email e email verified
+
         public string Username { get; set; }
         public string Password { get; set; }
         public UserProfileEnum UserProfile { get; set; }
+         public string userEmail { get; set; }
+         public bool IsEmailVerified {get;set;}
 
 
         #region construtores
