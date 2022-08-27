@@ -10,6 +10,7 @@ using System.Security.Claims;
 using infrastructure.Repository.Interfaces.Token;
 using Microsoft.Extensions.Options;
 using models.Configuration.TokenConfiguration;
+using Models.Dto.Login.Register;
 
 namespace application.Services.Authentication
 {
@@ -54,14 +55,16 @@ namespace application.Services.Authentication
             return new TokenDTO();
         }
 
-        public async Task SignUp(LoginInput input)
+        public async Task SignUp(SignUpInput input)
         {
 
             var encryptedPassword = Encrypt(input.Password);
 
-            var loginDto = new LoginDto(input.Username, encryptedPassword, input.UserProfile);
+            var signUp = new SignUpDto(input, encryptedPassword);
 
-            await _userRepository.SignUp(loginDto);
+            await _userRepository.SignUp(signUp);
+
+            //Mandar e-mail via SES quando produto estiver finalizado
 
         }
 

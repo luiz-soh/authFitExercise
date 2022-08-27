@@ -1,8 +1,9 @@
 using application.Interfaces.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using models.Dto.Login;
+using Models.Dto.Login.Register;
 
-namespace web_api.Controllers.Login
+namespace Fitexerciselogin_api.Controllers.Login
 {
     [ApiController]
     [Route("[controller]")]
@@ -15,8 +16,6 @@ namespace web_api.Controllers.Login
             _authentication = authentication;
         }
 
-        //TODO
-        //Cria inputs separados para SignIn e SignUp
         [HttpPost("SignIn")]
         public async Task<IActionResult> SignIn(LoginInput input)
         {
@@ -32,10 +31,19 @@ namespace web_api.Controllers.Login
         }
 
         [HttpPost("SignUp")]
-        public async Task<IActionResult> SignUp(LoginInput input)
+        public async Task<IActionResult> SignUp(SignUpInput input)
         {
-            if (string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
-                return BadRequest(new { message = "usuario e senha obrigatórios" });
+            //TODO
+            //Pensar em usar fluentValidation
+
+            if (input.Password != input.ConfirmPassword)
+                return BadRequest(new { message = "Senhas não batem" });
+            if (input.Password.Length < 8 || !input.Password.Any(c => char.IsDigit(c)) ||
+            !input.Password.Any(c => char.IsLower(c)) || !input.Password.Any(c => char.IsUpper(c)) ||
+            !input.Password.Any(c => !char.IsLetterOrDigit(c)))
+            {
+                return BadRequest(new { message = "Senha muito fraca" });
+            }
 
             await _authentication.SignUp(input);
 

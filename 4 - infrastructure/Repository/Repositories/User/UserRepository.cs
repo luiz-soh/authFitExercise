@@ -7,6 +7,7 @@ using models.Dto.Token;
 using models.Dto.User;
 using models.Entities.FitUser;
 using Models.Configuration.ConnectionString;
+using Models.Dto.Login.Register;
 
 namespace infrastructure.Repository.Repositories.User
 {
@@ -31,7 +32,7 @@ namespace infrastructure.Repository.Repositories.User
             }
         }
 
-        public async Task SignUp(LoginDto input)
+        public async Task SignUp(SignUpDto input)
         {
 
             var user = new FitUser(input);
