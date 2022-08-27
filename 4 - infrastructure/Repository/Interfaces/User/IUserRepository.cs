@@ -10,7 +10,7 @@ namespace infrastructure.Repository.Interfaces.User
         Task<UserDto> SignIn(LoginDto input);
         Task SignUp(SignUpDto input);
         Task UpdateRefreshToken(TokenDTO input);
-        Task<UserDto> GetByRefreshToken(string refreshToken);
+        Task<UserDto> GetToRefreshToken(string refreshToken, int userId);
         Task<bool> UserAlreadyExists(string username, string email);
     }
 }

@@ -41,11 +41,8 @@ namespace Fitexerciselogin_api.Controllers.Login
             //TODO
             //Pensar em usar fluentValidation
 
-            if (input.Password != input.ConfirmPassword)
-                return BadRequest(new ErrorOutput("Senhas não batem"));
-            if (input.Password.Length < 8 || !input.Password.Any(c => char.IsDigit(c)) ||
-            !input.Password.Any(c => char.IsLower(c)) || !input.Password.Any(c => char.IsUpper(c)) ||
-            !input.Password.Any(c => !char.IsLetterOrDigit(c)))
+            if (!input.Password.Any(c => char.IsDigit(c)) || !input.Password.Any(c => char.IsLower(c)) ||
+            !input.Password.Any(c => char.IsUpper(c)) || !input.Password.Any(c => !char.IsLetterOrDigit(c)))
             {
                 return BadRequest(new ErrorOutput("Senha muito fraca"));
             }
@@ -61,15 +58,12 @@ namespace Fitexerciselogin_api.Controllers.Login
         }
 
         [HttpPut("UpdateToken")]
-        public async Task<IActionResult> UpdateToken(string refreshToken)
+        public async Task<IActionResult> UpdateToken(UpdateTokenInput input)
         {
-            if (string.IsNullOrEmpty(refreshToken))
-                return BadRequest(new { message = "usuario e senha obrigatórios" });
-
-            var token = await _authentication.UpdateToken(refreshToken);
+            var token = await _authentication.UpdateToken(input);
 
             if (string.IsNullOrEmpty(token.UserToken))
-                return NotFound(new { message = "usuario ou senha invalidos" });
+                return NotFound(new ErrorOutput("usuario ou senha invalidos"));
 
             return Ok(token);
         }

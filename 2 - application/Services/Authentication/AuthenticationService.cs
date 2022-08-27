@@ -80,10 +80,10 @@ namespace application.Services.Authentication
 
         }
 
-        public async Task<TokenDTO> UpdateToken(string refreshToken)
+        public async Task<TokenDTO> UpdateToken(UpdateTokenInput input)
         {
 
-            var user = await _userRepository.GetByRefreshToken(refreshToken);
+            var user = await _userRepository.GetToRefreshToken(input.RefreshToken, input.UserId);
 
             if (user.Id != 0)
             {

@@ -10,6 +10,6 @@ namespace application.Interfaces.Authentication
         Task<TokenDTO> SignIn(LoginInput input);
         Task<ErrorOutput?> SignUp(SignUpInput input);
 
-        Task<TokenDTO> UpdateToken(string refreshToken);
+        Task<TokenDTO> UpdateToken(UpdateTokenInput input);
     }
 }

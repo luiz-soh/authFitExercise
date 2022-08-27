@@ -18,9 +18,11 @@ namespace Models.Dto.Login.Register
         public string Username { get; set; }
 
         [Required]
+        [StringLength(maximumLength: 100, MinimumLength = 8, ErrorMessage = "Deve ter pelo menos 8 caracteres" )]
         public string Password { get; set; }
 
         [Required]
+        [Compare(otherProperty: "Password", ErrorMessage = "Senhas não batem")]
         public string ConfirmPassword { get; set; }
 
         public int UserProfile { get; set; }

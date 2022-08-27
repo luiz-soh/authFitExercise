@@ -56,10 +56,10 @@ namespace infrastructure.Repository.Repositories.User
             }
         }
 
-        public async Task<UserDto> GetByRefreshToken(string refreshToken)
+        public async Task<UserDto> GetToRefreshToken(string refreshToken, int userId)
         {
             using var context = new ContextBase(_optionsBuilder, _connectionString);
-            var user = await context.FitUser.Where(x => x.RefreshToken == refreshToken).FirstOrDefaultAsync();
+            var user = await context.FitUser.Where(x => x.RefreshToken == refreshToken && x.UserId == userId).FirstOrDefaultAsync();
 
             if (user != null)
                 return new UserDto(user);
