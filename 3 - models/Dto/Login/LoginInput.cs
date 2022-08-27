@@ -9,8 +9,6 @@ namespace models.Dto.Login
         {
             Username = string.Empty;
             Password = string.Empty;
-            UserProfile = (int)UserProfileEnum.user;
-            UserEmail = string.Empty;
 
         }
 
@@ -20,9 +18,5 @@ namespace models.Dto.Login
         [Required]
         public string Password { get; set; }
 
-        public int UserProfile { get; set; } = (int)UserProfileEnum.user;
-
-        [Required]
-        public string UserEmail { get; set; }
     }
 }

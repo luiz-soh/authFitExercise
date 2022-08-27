@@ -11,6 +11,8 @@ using infrastructure.Repository.Interfaces.Token;
 using Microsoft.Extensions.Options;
 using models.Configuration.TokenConfiguration;
 using Models.Dto.Login.Register;
+using Models.Dto.Error;
+using models.Dto.User;
 
 namespace application.Services.Authentication
 {
@@ -37,13 +39,17 @@ namespace application.Services.Authentication
             var encryptedPassword = Encrypt(input.Password);
             loginDto.Password = encryptedPassword;
 
-            var userId = await _userRepository.SignIn(loginDto);
+            var user = await _userRepository.SignIn(loginDto);
 
-            if (userId != 0)
+            if (user.Id != 0)
             {
-                var token = GenerateToken(input.Username, userId);
+                if (!user.IsEmailVerified)
+                {
+                    return new TokenDTO(user);
+                }
+                var token = GenerateToken(user);
 
-                var cachedToken = new CachedTokenDTO(userId, token.UserToken);
+                var cachedToken = new CachedTokenDTO(user.Id, token.UserToken);
                 var saveToken = await _tokenRepository.AddToken(cachedToken);
                 if (!saveToken)
                     return new TokenDTO();
@@ -55,14 +61,20 @@ namespace application.Services.Authentication
             return new TokenDTO();
         }
 
-        public async Task SignUp(SignUpInput input)
+        public async Task<ErrorOutput?> SignUp(SignUpInput input)
         {
 
             var encryptedPassword = Encrypt(input.Password);
 
             var signUp = new SignUpDto(input, encryptedPassword);
 
+            if (await _userRepository.UserAlreadyExists(input.Username, input.UserEmail))
+            {
+                return new ErrorOutput("Username ou e-mail ja cadastrado");
+            }
+
             await _userRepository.SignUp(signUp);
+            return null;
 
             //Mandar e-mail via SES quando produto estiver finalizado
 
@@ -75,7 +87,7 @@ namespace application.Services.Authentication
 
             if (user.Id != 0)
             {
-                var token = GenerateToken(user.Name, user.Id);
+                var token = GenerateToken(user);
 
                 var cachedToken = new CachedTokenDTO(user.Id, token.UserToken);
                 var saveToken = await _tokenRepository.AddToken(cachedToken);
@@ -93,7 +105,7 @@ namespace application.Services.Authentication
 
         #region private methods
 
-        private TokenDTO GenerateToken(string username, int userId)
+        private TokenDTO GenerateToken(UserDto user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -104,7 +116,7 @@ namespace application.Services.Authentication
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Name, user.Name),
                     new Claim(ClaimTypes.Role, "Adm")
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
@@ -115,7 +127,7 @@ namespace application.Services.Authentication
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return new TokenDTO(tokenHandler.WriteToken(token), GenerateRefreshToken(), userId);
+            return new TokenDTO(tokenHandler.WriteToken(token), GenerateRefreshToken(), user.Id, user.IsEmailVerified);
         }
 
         private static string GenerateRefreshToken()

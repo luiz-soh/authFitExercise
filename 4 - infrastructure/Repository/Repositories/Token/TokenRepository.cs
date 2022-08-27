@@ -24,6 +24,7 @@ namespace infrastructure.Repository.Repositories.Token
             catch
             {
                 return false;
+
             }
         }
     }

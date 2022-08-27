@@ -1,6 +1,7 @@
 using application.Interfaces.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using models.Dto.Login;
+using Models.Dto.Error;
 using Models.Dto.Login.Register;
 
 namespace Fitexerciselogin_api.Controllers.Login
@@ -19,13 +20,17 @@ namespace Fitexerciselogin_api.Controllers.Login
         [HttpPost("SignIn")]
         public async Task<IActionResult> SignIn(LoginInput input)
         {
-            if (string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
-                return BadRequest(new { message = "usuario e senha obrigatórios" });
 
             var token = await _authentication.SignIn(input);
 
             if (string.IsNullOrEmpty(token.UserToken))
-                return NotFound(new { message = "usuario ou senha invalidos" });
+            {
+                if (token.UserId != 0)
+                {
+                    return Ok(token);
+                }
+                return NotFound(new ErrorOutput("usuario ou senha invalidos"));
+            }
 
             return Ok(token);
         }
@@ -37,15 +42,20 @@ namespace Fitexerciselogin_api.Controllers.Login
             //Pensar em usar fluentValidation
 
             if (input.Password != input.ConfirmPassword)
-                return BadRequest(new { message = "Senhas não batem" });
+                return BadRequest(new ErrorOutput("Senhas não batem"));
             if (input.Password.Length < 8 || !input.Password.Any(c => char.IsDigit(c)) ||
             !input.Password.Any(c => char.IsLower(c)) || !input.Password.Any(c => char.IsUpper(c)) ||
             !input.Password.Any(c => !char.IsLetterOrDigit(c)))
             {
-                return BadRequest(new { message = "Senha muito fraca" });
+                return BadRequest(new ErrorOutput("Senha muito fraca"));
             }
 
-            await _authentication.SignUp(input);
+            var result = await _authentication.SignUp(input);
+
+            if (result != null)
+            {
+                return BadRequest(result);
+            }
 
             return Ok();
         }
