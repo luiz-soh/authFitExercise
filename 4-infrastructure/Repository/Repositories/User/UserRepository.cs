@@ -67,10 +67,10 @@ namespace infrastructure.Repository.Repositories.User
                 return new UserDto();
         }
 
-        public async Task<bool> UserAlreadyExists(string username, string email)
+        public async Task<bool> UserAlreadyExists(string username)
         {
             using var context = new ContextBase(_optionsBuilder, _connectionString);
-            return await context.FitUser.Where(u => u.UserEmail == email || u.Username == username).AnyAsync();
+            return await context.FitUser.Where(u => u.Username == username).AnyAsync();
         }
     }
 }

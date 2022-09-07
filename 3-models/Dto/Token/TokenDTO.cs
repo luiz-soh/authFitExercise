@@ -5,12 +5,11 @@ namespace models.Dto.Token
     public class TokenDTO
     {
         #region  construtores
-        public TokenDTO(string userToken, string refreshToken, int userId, bool isEmailVerified)
+        public TokenDTO(string userToken, string refreshToken, int userId)
         {
             UserToken = userToken;
             RefreshToken = refreshToken;
             UserId = userId;
-            IsEmailVerified = isEmailVerified;
         }
 
         public TokenDTO()
@@ -18,7 +17,6 @@ namespace models.Dto.Token
             UserToken = string.Empty;
             RefreshToken = string.Empty;
             UserId = 0;
-            IsEmailVerified = false;
         }
 
         //caso esteja com credenciais certas porem e-mail não verificado
@@ -27,13 +25,11 @@ namespace models.Dto.Token
             UserToken = string.Empty;
             RefreshToken = string.Empty;
             UserId = user.Id;
-            IsEmailVerified = user.IsEmailVerified;
         }
         #endregion
 
         public int UserId { get; set; }
         public string UserToken { get; set; }
         public string RefreshToken { get; set; }
-        public bool IsEmailVerified { get; set; }
     }
 }

@@ -43,10 +43,6 @@ namespace application.Services.Authentication
 
             if (user.Id != 0)
             {
-                if (!user.IsEmailVerified)
-                {
-                    return new TokenDTO(user);
-                }
                 var token = GenerateToken(user);
 
                 var cachedToken = new CachedTokenDTO(user.Id, token.UserToken);
@@ -68,7 +64,7 @@ namespace application.Services.Authentication
 
             var signUp = new SignUpDto(input, encryptedPassword);
 
-            if (await _userRepository.UserAlreadyExists(input.Username, input.UserEmail))
+            if (await _userRepository.UserAlreadyExists(input.Username))
             {
                 return new ErrorOutput("Username ou e-mail ja cadastrado");
             }
@@ -127,7 +123,7 @@ namespace application.Services.Authentication
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return new TokenDTO(tokenHandler.WriteToken(token), GenerateRefreshToken(), user.Id, user.IsEmailVerified);
+            return new TokenDTO(tokenHandler.WriteToken(token), GenerateRefreshToken(), user.Id);
         }
 
         private static string GenerateRefreshToken()

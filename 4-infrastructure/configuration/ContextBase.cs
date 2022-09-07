@@ -20,7 +20,7 @@ namespace infrastructure.Configuration
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql(GetStringConnectionConfig(), ServerVersion.AutoDetect(GetStringConnectionConfig()));
+                optionsBuilder.UseNpgsql(GetStringConnectionConfig());
                 base.OnConfiguring(optionsBuilder);
             }
         }
