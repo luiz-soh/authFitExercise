@@ -54,7 +54,7 @@ namespace Fitexerciselogin_api.Controllers.Login
                 return BadRequest(result);
             }
 
-            return Ok();
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpPut("UpdateToken")]
