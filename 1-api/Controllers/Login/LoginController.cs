@@ -1,6 +1,7 @@
 using application.Interfaces.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using models.Dto.Login;
+using models.Dto.Token;
 using Models.Dto.Error;
 using Models.Dto.Login.Register;
 
@@ -63,7 +64,7 @@ namespace Fitexerciselogin_api.Controllers.Login
             var token = await _authentication.UpdateToken(input);
 
             if (string.IsNullOrEmpty(token.UserToken))
-                return NotFound(new ErrorOutput("usuario ou senha invalidos"));
+                return NotFound(new TokenDTO());
 
             return Ok(token);
         }
