@@ -17,7 +17,7 @@ namespace Models.Dto.Login.Register
         public string Username { get; set; }
 
         [Required]
-        [StringLength(maximumLength: 100, MinimumLength = 8, ErrorMessage = "Deve ter pelo menos 8 caracteres" )]
+        [RegularExpression("^(?=.*?[A-Za-z0-9])(?=.*?[!@#\\$&*~]).{8,}$", ErrorMessage = "Deve ter pelo menos 8 caracteres e 1 caractere especial")]
         public string Password { get; set; }
 
         [Required]

@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using application.Interfaces.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using models.Dto.Login;
@@ -39,15 +40,6 @@ namespace Fitexerciselogin_api.Controllers.Login
         [HttpPost("SignUp")]
         public async Task<IActionResult> SignUp(SignUpInput input)
         {
-            //TODO
-            //Pensar em usar fluentValidation
-
-            if (!input.Password.Any(c => char.IsDigit(c)) || !input.Password.Any(c => char.IsLower(c)) ||
-            !input.Password.Any(c => char.IsUpper(c)) || !input.Password.Any(c => !char.IsLetterOrDigit(c)))
-            {
-                return BadRequest(new ErrorOutput("Senha muito fraca"));
-            }
-
             var result = await _authentication.SignUp(input);
 
             if (result != null)
