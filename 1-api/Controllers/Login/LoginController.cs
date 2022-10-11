@@ -22,7 +22,7 @@ namespace Fitexerciselogin_api.Controllers.Login
         [HttpPost("SignIn")]
         public async Task<IActionResult> SignIn(LoginInput input)
         {
-
+            input.Username = input.Username.Trim();
             var token = await _authentication.SignIn(input);
 
             if (string.IsNullOrEmpty(token.UserToken))
@@ -40,6 +40,7 @@ namespace Fitexerciselogin_api.Controllers.Login
         [HttpPost("SignUp")]
         public async Task<IActionResult> SignUp(SignUpInput input)
         {
+            input.Username = input.Username.Trim();
             var result = await _authentication.SignUp(input);
 
             if (result != null)
