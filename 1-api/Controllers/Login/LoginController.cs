@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using application.Interfaces.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using models.Dto.Login;
 using models.Dto.Token;
@@ -60,6 +61,22 @@ namespace Fitexerciselogin_api.Controllers.Login
                 return NotFound(new TokenDTO());
 
             return Ok(token);
+        }
+
+        [HttpDelete("DeleteUser/{userId}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteUser([FromRoute] int userId)
+        {
+            var success = await _authentication.DeleteUser(userId);
+
+            if (success)
+            {
+                return Ok(success);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
     }

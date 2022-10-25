@@ -73,9 +73,18 @@ namespace infrastructure.Repository.Repositories.User
             return await context.FitUser.Where(u => u.Username == username).AnyAsync();
         }
 
-        Task<bool> DeleteUser(int userId)
+        public async Task<bool> DeleteUser(int userId)
         {
-using var context = new ContextBase(_optionsBuilder, _connectionString);
+            using var context = new ContextBase(_optionsBuilder, _connectionString);
+            var user = await context.FitUser.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                context.FitUser.Remove(user);
+                await context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

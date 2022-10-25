@@ -99,6 +99,12 @@ namespace application.Services.Authentication
 
         }
 
+
+        public async Task<bool> DeleteUser(int userId)
+        {
+            return await _userRepository.DeleteUser(userId);
+        }
+
         #region private methods
 
         private TokenDTO GenerateToken(UserDto user)

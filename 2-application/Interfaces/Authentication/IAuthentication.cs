@@ -11,5 +11,6 @@ namespace application.Interfaces.Authentication
         Task<ErrorOutput?> SignUp(SignUpInput input);
 
         Task<TokenDTO> UpdateToken(UpdateTokenInput input);
+        Task<bool> DeleteUser(int userId);
     }
 }

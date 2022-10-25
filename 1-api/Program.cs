@@ -6,13 +6,34 @@ using infrastructure.Repository.Interfaces.Token;
 using infrastructure.Repository.Interfaces.User;
 using infrastructure.Repository.Repositories.Token;
 using infrastructure.Repository.Repositories.User;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using models.Configuration.TokenConfiguration;
 using Models.Configuration.ConnectionString;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<TokenConfiguration>(
     builder.Configuration.GetSection(TokenConfiguration.Configuration));
+
+string secret = builder.Configuration["TokenConfiguration:ClientSecret"]!;
+
+var key = Encoding.ASCII.GetBytes(secret);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+        };
+    });
 
 builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection(ConnectionStrings.ConnectionString));
 // Add services to the container.
@@ -46,6 +67,7 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
