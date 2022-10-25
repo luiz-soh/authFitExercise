@@ -72,5 +72,10 @@ namespace infrastructure.Repository.Repositories.User
             using var context = new ContextBase(_optionsBuilder, _connectionString);
             return await context.FitUser.Where(u => u.Username == username).AnyAsync();
         }
+
+        Task<bool> DeleteUser(int userId)
+        {
+using var context = new ContextBase(_optionsBuilder, _connectionString);
+        }
     }
 }

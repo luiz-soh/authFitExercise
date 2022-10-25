@@ -12,5 +12,6 @@ namespace infrastructure.Repository.Interfaces.User
         Task UpdateRefreshToken(TokenDTO input);
         Task<UserDto> GetToRefreshToken(string refreshToken, int userId);
         Task<bool> UserAlreadyExists(string username);
+        Task<bool> DeleteUser(int userId);
     }
 }
