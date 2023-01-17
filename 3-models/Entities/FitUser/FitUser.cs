@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Models.Dto.Login.Register;
 using Models.Enums;
 
-namespace models.Entities.FitUser
+namespace Models.Entities.FitUser
 {
     [Table("fit_user")]
     public class FitUser

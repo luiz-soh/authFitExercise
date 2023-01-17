@@ -1,6 +1,6 @@
 using Models.Enums;
 
-namespace models.Dto.Login
+namespace Models.Dto.Login
 {
     public class LoginDto
     {

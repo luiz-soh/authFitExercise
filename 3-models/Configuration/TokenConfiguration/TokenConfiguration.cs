@@ -1,4 +1,4 @@
-namespace models.Configuration.TokenConfiguration
+namespace Models.Configuration.TokenConfiguration
 {
     public class TokenConfiguration
     {

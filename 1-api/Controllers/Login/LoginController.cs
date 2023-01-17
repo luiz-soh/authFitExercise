@@ -2,8 +2,8 @@ using System.Text.RegularExpressions;
 using application.Interfaces.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using models.Dto.Login;
-using models.Dto.Token;
+using Models.Dto.Login;
+using Models.Dto.Token;
 using Models.Dto.Error;
 using Models.Dto.Login.Register;
 

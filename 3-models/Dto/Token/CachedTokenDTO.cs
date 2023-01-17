@@ -1,4 +1,4 @@
-namespace models.Dto.Token
+namespace Models.Dto.Token
 {
     public class CachedTokenDTO
     {

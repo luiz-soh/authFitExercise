@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using models.Dto.Token;
+using Models.Dto.Token;
 
 namespace infrastructure.Repository.Interfaces.Token
 {

@@ -1,6 +1,6 @@
-﻿using models.Entities.FitUser;
+﻿using Models.Entities.FitUser;
 
-namespace models.Dto.User
+namespace Models.Dto.User
 {
     public class UserDto
     {

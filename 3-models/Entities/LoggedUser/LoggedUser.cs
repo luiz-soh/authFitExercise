@@ -1,6 +1,6 @@
 using Amazon.DynamoDBv2.DataModel;
 
-namespace models.Entities.LoggedUser
+namespace Models.Entities.LoggedUser
 {
     [DynamoDBTable("fitexercisetokens")]
     public class LoggedUser

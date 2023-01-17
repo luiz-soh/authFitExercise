@@ -1,6 +1,6 @@
-using models.Dto.Login;
-using models.Dto.Token;
-using models.Dto.User;
+using Models.Dto.Login;
+using Models.Dto.Token;
+using Models.Dto.User;
 using Models.Dto.Login.Register;
 
 namespace infrastructure.Repository.Interfaces.User

@@ -1,7 +1,7 @@
 using Amazon.DynamoDBv2.DataModel;
 using infrastructure.Repository.Interfaces.Token;
-using models.Dto.Token;
-using models.Entities.LoggedUser;
+using Models.Dto.Token;
+using Models.Entities.LoggedUser;
 
 namespace infrastructure.Repository.Repositories.Token
 {

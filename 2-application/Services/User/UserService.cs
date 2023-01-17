@@ -1,6 +1,6 @@
 ﻿using application.Interfaces.Authentication;
-using models.Dto.Login;
-using models.Dto.Token;
+using Models.Dto.Login;
+using Models.Dto.Token;
 using infrastructure.Repository.Interfaces.User;
 using System.Security.Cryptography;
 using System.Text;
@@ -9,12 +9,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using infrastructure.Repository.Interfaces.Token;
 using Microsoft.Extensions.Options;
-using models.Configuration.TokenConfiguration;
+using Models.Configuration.TokenConfiguration;
 using Models.Dto.Login.Register;
 using Models.Dto.Error;
-using models.Dto.User;
-using Application.Interfaces.User;
 using Models.Dto.User;
+using Application.Interfaces.User;
 
 namespace application.Services.Authentication
 {

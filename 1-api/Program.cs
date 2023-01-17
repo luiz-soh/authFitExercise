@@ -9,7 +9,7 @@ using infrastructure.Repository.Repositories.Token;
 using infrastructure.Repository.Repositories.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using models.Configuration.TokenConfiguration;
+using Models.Configuration.TokenConfiguration;
 using Models.Configuration.ConnectionString;
 using System.Text;
 

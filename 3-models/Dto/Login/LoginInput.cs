@@ -1,7 +1,7 @@
 using Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace models.Dto.Login
+namespace Models.Dto.Login
 {
     public class LoginInput
     {

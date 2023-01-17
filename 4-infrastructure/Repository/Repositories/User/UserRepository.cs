@@ -2,10 +2,10 @@ using infrastructure.Configuration;
 using infrastructure.Repository.Interfaces.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using models.Dto.Login;
-using models.Dto.Token;
-using models.Dto.User;
-using models.Entities.FitUser;
+using Models.Dto.Login;
+using Models.Dto.Token;
+using Models.Dto.User;
+using Models.Entities.FitUser;
 using Models.Configuration.ConnectionString;
 using Models.Dto.Login.Register;
 

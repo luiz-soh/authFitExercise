@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using models.Entities.FitUser;
+using Models.Entities.FitUser;
 using Models.Configuration.ConnectionString;
 
 namespace infrastructure.Configuration

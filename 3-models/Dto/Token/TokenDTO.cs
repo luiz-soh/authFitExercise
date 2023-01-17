@@ -1,6 +1,6 @@
-using models.Dto.User;
+using Models.Dto.User;
 
-namespace models.Dto.Token
+namespace Models.Dto.Token
 {
     public class TokenDTO
     {
@@ -19,7 +19,7 @@ namespace models.Dto.Token
             UserId = 0;
         }
 
-        //caso esteja com credenciais certas porem e-mail não verificado
+        //caso esteja com credenciais certas porem e-mail nï¿½o verificado
         public TokenDTO(UserDto user)
         {
             UserToken = string.Empty;

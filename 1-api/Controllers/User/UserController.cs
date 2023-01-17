@@ -4,8 +4,8 @@ using application.Interfaces.Authentication;
 using Application.Interfaces.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using models.Dto.Login;
-using models.Dto.Token;
+using Models.Dto.Login;
+using Models.Dto.Token;
 using Models.Dto.Error;
 using Models.Dto.Login.Register;
 using Models.Dto.User;
@@ -36,7 +36,8 @@ namespace Fitexerciselogin_api.Controllers.Login
         public async Task<IActionResult> GetUserData([FromRoute] int userId)
         {
             var user = await _userService.GetUserData(userId);
-            if(user.Id == 0)
+
+            if (user.Id == 0)
             {
                 return NotFound();
             }
