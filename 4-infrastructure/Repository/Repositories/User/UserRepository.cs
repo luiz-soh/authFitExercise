@@ -86,5 +86,29 @@ namespace infrastructure.Repository.Repositories.User
             }
             return false;
         }
+
+        public async Task AddUserEmail(string email, int userId)
+        {
+            using var context = new ContextBase(_optionsBuilder, _connectionString);
+            var user = await context.FitUser.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                user.UserEmail = email;
+                context.FitUser.Update(user);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<UserDto> GetUserData(int userId)
+        {
+            using var context = new ContextBase(_optionsBuilder, _connectionString);
+            var user = await context.FitUser.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+
+            if (user != null)
+                return new UserDto(user);
+            else
+                return new UserDto();
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace Models.Dto.Login.Register
             Password = string.Empty;
             ConfirmPassword = string.Empty;
             UserProfile = (int)UserProfileEnum.user;
+            UserEmail = null;
         }
 
         [Required]
@@ -25,5 +26,8 @@ namespace Models.Dto.Login.Register
         public string ConfirmPassword { get; set; }
 
         public int UserProfile { get; set; }
+
+        [EmailAddress]
+        public string? UserEmail { get; set; }
     }
 }

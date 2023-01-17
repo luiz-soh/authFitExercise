@@ -13,5 +13,7 @@ namespace infrastructure.Repository.Interfaces.User
         Task<UserDto> GetToRefreshToken(string refreshToken, int userId);
         Task<bool> UserAlreadyExists(string username);
         Task<bool> DeleteUser(int userId);
+        Task AddUserEmail(string email, int userId);
+        Task<UserDto> GetUserData(int userId);
     }
 }

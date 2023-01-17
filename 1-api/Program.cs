@@ -2,6 +2,7 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using application.Interfaces.Authentication;
 using application.Services.Authentication;
+using Application.Interfaces.User;
 using infrastructure.Repository.Interfaces.Token;
 using infrastructure.Repository.Interfaces.User;
 using infrastructure.Repository.Repositories.Token;
@@ -40,6 +41,7 @@ builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection(C
 
 //User
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 //Authentication
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
