@@ -23,9 +23,9 @@ namespace Fitexerciselogin_api.Controllers.Login
             _userService = userService;
         }
 
-        [HttpPut("AddUserEmail")]
+        [HttpPut("UpdateUserEmail")]
         [Authorize]
-        public async Task<IActionResult> AddUserEmail([FromBody] AddUserEmailInput input)
+        public async Task<IActionResult> UpdateUserEmail([FromBody] AddUserEmailInput input)
         {
             await _userService.AddUserEmail(input);
             return Ok();
