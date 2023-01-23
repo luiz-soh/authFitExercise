@@ -18,6 +18,7 @@ namespace Models.Entities.FitUser
             RefreshToken = string.Empty;
             UserId = 0;
             UserEmail = string.Empty;
+            GymId = null;
         }
         public FitUser(SignUpDto input)
         {
@@ -26,6 +27,7 @@ namespace Models.Entities.FitUser
             RefreshToken = string.Empty;
             Profile = input.UserProfile;
             UserEmail = input.UserEmail;
+            GymId= input.GymId;
         }
         #endregion
 
@@ -47,5 +49,8 @@ namespace Models.Entities.FitUser
 
         [Column("user_email")]
         public string? UserEmail { get; set; }
+
+        [Column("gym_id")]
+        public int? GymId { get; set; }
     }
 }

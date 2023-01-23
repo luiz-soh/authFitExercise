@@ -1,13 +1,6 @@
-﻿using System.Text.RegularExpressions;
-using Amazon.Runtime.Internal;
-using application.Interfaces.Authentication;
-using Application.Interfaces.User;
+﻿using Application.Interfaces.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models.Dto.Login;
-using Models.Dto.Token;
-using Models.Dto.Error;
-using Models.Dto.Login.Register;
 using Models.Dto.User;
 
 namespace Fitexerciselogin_api.Controllers.Login

@@ -1,127 +1,53 @@
 using application.Interfaces.Authentication;
-using Models.Dto.Login;
-using Models.Dto.Token;
-using infrastructure.Repository.Interfaces.User;
 using System.Security.Cryptography;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
-using infrastructure.Repository.Interfaces.Token;
 using Microsoft.Extensions.Options;
 using Models.Configuration.TokenConfiguration;
-using Models.Dto.Login.Register;
-using Models.Dto.Error;
-using Models.Dto.User;
+using Infrastructure.Repository.Interfaces.Gym;
 
 namespace application.Services.Authentication
 {
-    public class AuthenticationService : IAuthentication
+    public class AuthenticationService : IAuthenticationService
     {
 
-        private readonly IUserRepository _userRepository;
-        private readonly ITokenRepository _tokenRepository;
+        private readonly IGymRepository _gymRepository;
         private readonly TokenConfiguration _settings;
 
 
-        public AuthenticationService(IUserRepository userRepository,
-        ITokenRepository tokenRepository, IOptions<TokenConfiguration> Settings)
+        public AuthenticationService(IOptions<TokenConfiguration> settings,
+        IGymRepository gymRepository)
         {
-            _userRepository = userRepository;
-            _tokenRepository = tokenRepository;
-            _settings = Settings.Value;
+            _settings = settings.Value;
+            _gymRepository = gymRepository;
         }
 
-        public async Task<TokenDTO> SignIn(LoginInput input)
+        public string EncryptPassword(string dataToEncrypt)
         {
-            var loginDto = new LoginDto(input.Username, input.Password);
+            string encryptedData;
+            var bytes = Encoding.UTF8.GetBytes($"{_settings.PreSalt}{dataToEncrypt}{_settings.PosSalt}");
+            var hash = SHA512.HashData(bytes);
+            encryptedData = GetStringFromHash(hash);
 
-            var encryptedPassword = Encrypt(input.Password);
-            loginDto.Password = encryptedPassword;
-
-            var user = await _userRepository.SignIn(loginDto);
-
-            if (user.Id != 0)
-            {
-                var token = GenerateToken(user);
-
-                var cachedToken = new CachedTokenDTO(user.Id, token.UserToken);
-                var saveToken = await _tokenRepository.AddToken(cachedToken);
-                if (!saveToken)
-                    return new TokenDTO();
-
-                await _userRepository.UpdateRefreshToken(token);
-
-                return token;
-            }
-            return new TokenDTO();
+            return encryptedData;
         }
 
-        public async Task<ErrorOutput?> SignUp(SignUpInput input)
-        {
-
-            var encryptedPassword = Encrypt(input.Password);
-
-            var signUp = new SignUpDto(input, encryptedPassword);
-
-            if (await _userRepository.UserAlreadyExists(input.Username))
-            {
-                return new ErrorOutput("Username ou e-mail ja cadastrado");
-            }
-
-            await _userRepository.SignUp(signUp);
-            return null;
-
-            //Mandar e-mail via SES quando produto estiver finalizado
-
-        }
-
-        public async Task<TokenDTO> UpdateToken(UpdateTokenInput input)
-        {
-
-            var user = await _userRepository.GetToRefreshToken(input.RefreshToken, input.UserId);
-
-            if (user.Id != 0)
-            {
-                var token = GenerateToken(user);
-
-                var cachedToken = new CachedTokenDTO(user.Id, token.UserToken);
-                var saveToken = await _tokenRepository.AddToken(cachedToken);
-                if (!saveToken)
-                    return new TokenDTO();
-
-                await _userRepository.UpdateRefreshToken(token);
-
-                return token;
-            }
-
-            return new TokenDTO();
-
-        }
-
-
-        public async Task<bool> DeleteUser(int userId)
-        {
-            return await _userRepository.DeleteUser(userId);
-        }
-
-        #region private methods
-
-        private TokenDTO GenerateToken(UserDto user)
+        public string GenerateToken(string name, string role, int validyHours)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-
-            string secret = _settings.ClientSecret;
+            var secret = _settings.ClientSecret;
             var key = Encoding.ASCII.GetBytes(secret);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Role, "Adm")
+                    new Claim(ClaimTypes.Name, name),
+                    new Claim(ClaimTypes.Role, role)
                 }),
-                Expires = DateTime.UtcNow.AddDays(1),
+                Expires = DateTime.UtcNow.AddHours(validyHours),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature)
@@ -129,31 +55,11 @@ namespace application.Services.Authentication
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return new TokenDTO(tokenHandler.WriteToken(token), GenerateRefreshToken(), user.Id);
+            return tokenHandler.WriteToken(token);
+
         }
 
-        private static string GenerateRefreshToken()
-        {
-            var randomNumber = new byte[64];
-            using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(randomNumber);
-            return Convert.ToBase64String(randomNumber);
-        }
-
-        private string Encrypt(string dataToEncrypt)
-        {
-            string encryptedData;
-
-            using (var sha512 = SHA512.Create())
-            {
-                var bytes = Encoding.UTF8.GetBytes($"{_settings.PreSalt}{dataToEncrypt}{_settings.PosSalt}");
-                var hash = sha512.ComputeHash(bytes);
-                encryptedData = GetStringFromHash(hash);
-            }
-
-            return encryptedData;
-        }
-
+        #region private methods
         private static string GetStringFromHash(byte[] hash)
         {
             var result = new StringBuilder();

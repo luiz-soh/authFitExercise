@@ -12,6 +12,7 @@ namespace Models.Dto.Login.Register
             ConfirmPassword = string.Empty;
             UserProfile = (int)UserProfileEnum.user;
             UserEmail = null;
+            GymId = null;
         }
 
         [Required]
@@ -29,5 +30,7 @@ namespace Models.Dto.Login.Register
 
         [EmailAddress]
         public string? UserEmail { get; set; }
+
+        public int? GymId { get; set; }
     }
 }

@@ -12,6 +12,10 @@ using Microsoft.IdentityModel.Tokens;
 using Models.Configuration.TokenConfiguration;
 using Models.Configuration.ConnectionString;
 using System.Text;
+using Infrastructure.Repository.Interfaces.Gym;
+using Infrastructure.Repository.Repositories.Gym;
+using Application.Interfaces.Gym;
+using Application.Services.Gym;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +49,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 //Authentication
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
-builder.Services.AddScoped<IAuthentication, AuthenticationService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+//Gym
+builder.Services.AddScoped<IGymRepository, GymRepository>();
+builder.Services.AddScoped<IGymService, GymService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

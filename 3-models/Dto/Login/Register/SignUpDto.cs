@@ -8,6 +8,7 @@ namespace Models.Dto.Login.Register
         public string Password { get; set; }
         public string? UserEmail { get; set; }
         public UserProfileEnum UserProfile { get; set; }
+        public int? GymId { get; set; }
 
 
         #region construtores
@@ -17,6 +18,7 @@ namespace Models.Dto.Login.Register
             Password = string.Empty;
             UserEmail = null;
             UserProfile = UserProfileEnum.user;
+            GymId = null;
 
         }
 
@@ -26,6 +28,7 @@ namespace Models.Dto.Login.Register
             Password = encryptedPassword;
             UserProfile = (UserProfileEnum)input.UserProfile;
             UserEmail = input.UserEmail;
+            GymId= input.GymId;
         }
         #endregion
     }

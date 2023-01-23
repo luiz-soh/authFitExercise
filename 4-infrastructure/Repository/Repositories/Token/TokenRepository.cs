@@ -1,6 +1,7 @@
 using Amazon.DynamoDBv2.DataModel;
 using infrastructure.Repository.Interfaces.Token;
 using Models.Dto.Token;
+using Models.Entities.Gym;
 using Models.Entities.LoggedUser;
 
 namespace infrastructure.Repository.Repositories.Token
@@ -13,11 +14,26 @@ namespace infrastructure.Repository.Repositories.Token
             _dynamoDBContext = dynamoDBContext;
         }
 
-        public async Task<bool> AddToken(CachedTokenDTO input)
+        public async Task<bool> AddGymToken(CachedTokenDTO input)
         {
             try
             {
-                var userLogin = new LoggedUser(input.UserId, input.Token);
+                var gymLogin = new LoggedGym(input.Id, input.Token);
+                await _dynamoDBContext.SaveAsync(gymLogin);
+                return true;
+            }
+            catch
+            {
+                return false;
+
+            }
+        }
+
+        public async Task<bool> AddUserToken(CachedTokenDTO input)
+        {
+            try
+            {
+                var userLogin = new LoggedUser(input.Id, input.Token);
                 await _dynamoDBContext.SaveAsync(userLogin);
                 return true;
             }
