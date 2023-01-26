@@ -48,11 +48,6 @@ namespace Application.Services.Gym
             {
                 var token = _authenticationService.GenerateToken(gym.GymName, "gym", 1);
 
-                var cachedToken = new CachedTokenDTO(gym.GymId, token);
-                var saveToken = await _tokenRepository.AddGymToken(cachedToken);
-                if (!saveToken)
-                    return new GymTokenDto();
-
                 return new GymTokenDto(gym.GymId, gym.GymName, token);
             }
 

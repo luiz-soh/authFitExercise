@@ -14,21 +14,6 @@ namespace infrastructure.Repository.Repositories.Token
             _dynamoDBContext = dynamoDBContext;
         }
 
-        public async Task<bool> AddGymToken(CachedTokenDTO input)
-        {
-            try
-            {
-                var gymLogin = new LoggedGym(input.Id, input.Token);
-                await _dynamoDBContext.SaveAsync(gymLogin);
-                return true;
-            }
-            catch
-            {
-                return false;
-
-            }
-        }
-
         public async Task<bool> AddUserToken(CachedTokenDTO input)
         {
             try
