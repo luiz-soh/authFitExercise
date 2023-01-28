@@ -16,6 +16,10 @@ using Infrastructure.Repository.Interfaces.Gym;
 using Infrastructure.Repository.Repositories.Gym;
 using Application.Interfaces.Gym;
 using Application.Services.Gym;
+using Infrastructure.Repository.Repositories.Plan;
+using Infrastructure.Repository.Interfaces.Plan;
+using Application.Services.Plan;
+using Application.Interfaces.Plan;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +58,10 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 //Gym
 builder.Services.AddScoped<IGymRepository, GymRepository>();
 builder.Services.AddScoped<IGymService, GymService>();
+
+//Plan
+builder.Services.AddScoped<IPlanRepository, PlanRepository>();
+builder.Services.AddScoped<IPlanService, PlanService>();
 
 //Add DynamoDB configuration
 var awsOptions = builder.Configuration.GetAWSOptions();

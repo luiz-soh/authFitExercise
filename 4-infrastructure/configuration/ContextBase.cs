@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Models.Entities.FitUser;
 using Models.Configuration.ConnectionString;
 using Models.Entities.Gym;
+using Models.Entities.Plan;
 
 namespace infrastructure.Configuration
 {
@@ -17,6 +18,7 @@ namespace infrastructure.Configuration
 
         public DbSet<FitUser> FitUser => Set<FitUser>();
         public DbSet<GymEntity> Gyms => Set<GymEntity>();
+        public DbSet<PlanEntity> Plan => Set<PlanEntity>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -10,7 +10,7 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'fitexercise_api' " />
   <ItemGroup>
-    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.101.32" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.101.33" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
@@ -27,9 +27,11 @@
     <ItemGroup>
       <None Remove="Controllers\User\" />
       <None Remove="Controllers\HealthCheck\" />
+      <None Remove="Controllers\Plan\" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Controllers\User\" />
       <Folder Include="Controllers\HealthCheck\" />
+      <Folder Include="Controllers\Plan\" />
     </ItemGroup>
 </Project>
