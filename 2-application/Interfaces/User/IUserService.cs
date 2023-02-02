@@ -1,5 +1,4 @@
-﻿using System;
-using Models.Dto.Error;
+﻿using Models.Dto.Error;
 using Models.Dto.Login.Register;
 using Models.Dto.Login;
 using Models.Dto.Token;
@@ -17,6 +16,8 @@ namespace Application.Interfaces.User
 
         Task<TokenDTO> UpdateToken(UpdateTokenInput input);
         Task<bool> DeleteUser(int userId);
+
+        Task<List<UserDto>> GetUsersByGymId(int gymId);
     }
 }
 

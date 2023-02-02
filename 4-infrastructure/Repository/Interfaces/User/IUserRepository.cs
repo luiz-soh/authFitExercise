@@ -15,5 +15,6 @@ namespace infrastructure.Repository.Interfaces.User
         Task<bool> DeleteUser(int userId);
         Task AddUserEmail(string email, int userId);
         Task<UserDto> GetUserData(int userId);
+        Task<List<UserDto>> GetUsersByGymId(int gymId);
     }
 }

@@ -109,6 +109,11 @@ namespace application.Services.Authentication
             return await _userRepository.DeleteUser(userId);
         }
 
+        public async Task<List<UserDto>> GetUsersByGymId(int gymId)
+        {
+            return await _userRepository.GetUsersByGymId(gymId);
+        }
+
 
         #region private methods
         private TokenDTO GenerateToken(UserDto user)

@@ -8,6 +8,8 @@ using Models.Dto.User;
 using Models.Entities.FitUser;
 using Models.Configuration.ConnectionString;
 using Models.Dto.Login.Register;
+using System;
+using System.Net.NetworkInformation;
 
 namespace infrastructure.Repository.Repositories.User
 {
@@ -109,6 +111,13 @@ namespace infrastructure.Repository.Repositories.User
                 return new UserDto(user);
             else
                 return new UserDto();
+        }
+
+        public async Task<List<UserDto>> GetUsersByGymId(int gymId)
+        {
+            using var context = new ContextBase(_optionsBuilder, _connectionString);
+
+            return await context.FitUser.Where(x => x.GymId == gymId).Select(u => new UserDto(u)).AsNoTracking().ToListAsync();
         }
     }
 }

@@ -37,5 +37,14 @@ namespace Fitexerciselogin_api.Controllers.Login
 
             return Ok(user);
         }
+
+        [HttpGet("GetUserByGymId/{gymId}")]
+        [Authorize(Roles = "gym")]
+        public async Task<IActionResult> GetUserByGymId([FromRoute] int gymId)
+        {
+            var users = await _userService.GetUsersByGymId(gymId);
+
+            return Ok(users);
+        }
     }
 }
