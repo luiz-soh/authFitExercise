@@ -26,6 +26,7 @@ namespace Fitexerciselogin_api.Controllers.Login
 
         [HttpGet("GetUserData/{userId}")]
         [Authorize]
+        [ProducesResponseType(typeof(UserDto), 200)]
         public async Task<IActionResult> GetUserData([FromRoute] int userId)
         {
             var user = await _userService.GetUserData(userId);
@@ -38,8 +39,9 @@ namespace Fitexerciselogin_api.Controllers.Login
             return Ok(user);
         }
 
-        [HttpGet("GetUserByGymId/{gymId}")]
+        [HttpGet("GetUsersByGymId/{gymId}")]
         [Authorize(Roles = "gym")]
+        [ProducesResponseType(typeof(List<UserDto>), 200)]
         public async Task<IActionResult> GetUserByGymId([FromRoute] int gymId)
         {
             var users = await _userService.GetUsersByGymId(gymId);
