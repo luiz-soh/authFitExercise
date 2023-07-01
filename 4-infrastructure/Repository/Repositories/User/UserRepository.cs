@@ -53,6 +53,7 @@ namespace infrastructure.Repository.Repositories.User
             if (user != null)
             {
                 user.RefreshToken = input.RefreshToken;
+                user.LastLogin = DateTime.Now;
                 contexto.FitUser.Update(user);
                 await contexto.SaveChangesAsync();
             }

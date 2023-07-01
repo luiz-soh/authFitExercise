@@ -68,7 +68,7 @@ namespace Fitexerciselogin_api.Controllers.Login
         }
 
         [HttpDelete("DeleteUser/{userId}")]
-        [Authorize]
+        [Authorize(Roles = "gym , adm")]
         public async Task<IActionResult> DeleteUser([FromRoute] int userId)
         {
             var success = await _userService.DeleteUser(userId);

@@ -27,7 +27,8 @@ namespace Models.Entities.FitUser
             RefreshToken = string.Empty;
             Profile = input.UserProfile;
             UserEmail = input.UserEmail;
-            GymId= input.GymId;
+            GymId = input.GymId;
+            Active = true;
         }
         #endregion
 
@@ -52,5 +53,11 @@ namespace Models.Entities.FitUser
 
         [Column("gym_id")]
         public int? GymId { get; set; }
+
+        [Column("active")]
+        public bool Active { get; set; }
+
+        [Column("last_login")]
+        public DateTime LastLogin { get; set; }
     }
 }
