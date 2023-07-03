@@ -19,6 +19,8 @@ namespace Models.Entities.FitUser
             UserId = 0;
             UserEmail = string.Empty;
             GymId = null;
+            Active = false;
+            LastLogin = DateTime.MinValue;
         }
         public FitUser(SignUpDto input)
         {
@@ -29,6 +31,7 @@ namespace Models.Entities.FitUser
             UserEmail = input.UserEmail;
             GymId = input.GymId;
             Active = true;
+            LastLogin = DateTime.UtcNow;
         }
         #endregion
 
